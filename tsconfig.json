@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext", "ES2015"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "rootDir": ".",
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["web/components/*"],
+      "@assets/*": ["web/assets/*"],
+      "@pages/*": ["web/pages/*"],
+      "@layouts/*": ["web/layouts/*"],
+      "@service/*": ["web/service/*"],
+      "@hooks/*": ["web/hooks/*"],
+      "@store/*": ["web/store/*"],
+      "@images/*": ["web/images/*"],
+      "@utils/*": ["web/utils/*"],
+      "@type/*": ["web/type/*"],
+      "@lib/*": ["web/lib/*"],
+      "@constants/*": ["web/constants/*"]
+    }
+  },
+  "include": ["src"]
+}

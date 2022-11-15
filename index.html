@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://assets.surveyplus.cn/surveylite/static/embed.min.js"></script>
+    <script>
+      function onSubmit() {
+        console.log('received survey response');
+      }
+      function onClose() {
+        console.log('do something on close window');
+      }
+      window.onload = function () {
+        window.surveylite.initSurvey({
+          sid: '2691033691682816',
+          channelId: '2844891072880640',
+          width: '450px',
+          externalUserId: '',
+          departmentCode: '',
+          externalCompanyId: '',
+          env: 'https://www.surveyplus.cn',
+          onClose: onClose,
+          onSubmit: onSubmit,
+          parameters: { key: 'value' },
+        });
+      };
+    </script>
+  </body>
+</html>

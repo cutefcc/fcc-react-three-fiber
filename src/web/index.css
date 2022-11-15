@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  /* overflow-y: hidden; */
+  font-size: 16px;
+}
+:root {
+  --mainColor: red;
+  --aColor: pink;
+  --headerHeight: 80px;
+  --headerBgColor: #2f354f;
+  --bgColor: #fff;
+  --borderColor: #f2f4f7;
+  --borderRadius: 4px;
+}
+#root {
+  height: 100%;
+}
+
+.contentRoot {
+  height: calc(100vh - var(--headerHeight));
+}
