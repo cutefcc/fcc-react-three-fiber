@@ -1,9 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import { TopHeader } from './style';
+import { TopHeader, FullScreen } from './style';
 
-const Header = () => {
+const Header = props => {
+  const { onFullScreen = () => {}, onExitFullScreen = () => {} } = props;
   const navigate = useNavigate();
+  const handleFull = () => {
+    const fullElement = document.fullscreenElement;
+    if (!fullElement) {
+      onFullScreen();
+    } else {
+      onExitFullScreen();
+    }
+  };
 
-  return <TopHeader className="h-58 pl-20 pr-20 xl:pl-0 xl:pr-0"></TopHeader>;
+  return (
+    <TopHeader className="h-[6vh] w-full absolute">
+      <span>WZ8涡轴发动机工作原理教学系统</span>
+      <FullScreen onClick={handleFull}></FullScreen>
+    </TopHeader>
+  );
 };
 export default Header;

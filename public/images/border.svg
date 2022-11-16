@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="修饰" width="361" height="8.719" viewBox="0 0 361 8.719" class="injected-svg" data-src="/assets/media/block-desc.4f627402.svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #98AEC7;
+        stroke-width: 1px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-1, .cls-3 {
+        opacity: 0.6;
+      }
+
+      .cls-3, .cls-4, .cls-5, .cls-6 {
+        fill: #98AEC7;
+      }
+
+      .cls-4 {
+        opacity: 0.6;
+      }
+
+      .cls-5 {
+        opacity: 0.4;
+      }
+
+      .cls-6 {
+        opacity: 0.2;
+      }
+    </style>
+  </defs>
+  <path id="矩形_2467" data-name="矩形 2467" class="cls-1" d="M24,382v-6H139l6,6" transform="translate(-23.5 -374.5)"></path>
+  <path id="矩形_2467_拷贝_4" data-name="矩形 2467 拷贝 4" class="cls-2" d="M24,382v-6.036h7" transform="translate(-23.5 -374.5)"></path>
+  <path id="矩形_2467_拷贝_2" data-name="矩形 2467 拷贝 2" class="cls-1" d="M383,382.251V376H284l-6,6.251" transform="translate(-23.5 -374.5)"></path>
+  <path id="矩形_2467_拷贝_3" data-name="矩形 2467 拷贝 3" class="cls-2" d="M383,382.251V376h-7" transform="translate(-23.5 -374.5)"></path>
+  <path id="矩形_2467_拷贝" data-name="矩形 2467 拷贝" class="cls-3" d="M146,376H276l-6,6H152Z" transform="translate(-23.5 -374.5)"></path>
+  <rect id="矩形_2474" data-name="矩形 2474" class="cls-4" x="353.5" y="3.5" width="3" height="3"></rect>
+  <rect id="矩形_2474_拷贝" data-name="矩形 2474 拷贝" class="cls-5" x="347.5" y="3.5" width="3" height="3"></rect>
+  <rect id="矩形_2474_拷贝_2" data-name="矩形 2474 拷贝 2" class="cls-6" x="341.5" y="3.5" width="3" height="3"></rect>
+</svg>

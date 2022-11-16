@@ -20,6 +20,9 @@ module.exports = {
           'spin-slow': 'spin 2s linear infinite',
         },
       },
+      backgroundImage: {
+        header: "url('/public/images/head.png')",
+      },
     },
   },
   fontSize: customText,
