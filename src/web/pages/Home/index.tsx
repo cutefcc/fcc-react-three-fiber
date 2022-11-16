@@ -106,6 +106,13 @@ const Home = (): JSX.Element => {
     console.log('glb', glb);
     // 开启shadow
     glb.nodes.mesh_0.castShadow = true;
+    gsap.to(glb.scene.rotation, {
+      y: Math.PI * 2,
+      duration: 10,
+      repeat: -1,
+      ease: 'linear',
+      // yoyo: true,
+    });
     return (
       <primitive
         castShadow
