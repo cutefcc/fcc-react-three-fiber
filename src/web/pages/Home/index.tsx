@@ -191,12 +191,12 @@ const Home = (): JSX.Element => {
             color={'#fff'}
           />
           {/* // 平行光2 */}
-          <directionalLight
+          {/* <directionalLight
             position={[-10, 10, -10]}
             intensity={0.6}
             castShadow={true}
             color={'#Fff'}
-          />
+          /> */}
           <Suspense fallback={<Loader />}>
             <LoadAsyncModel />
           </Suspense>
@@ -222,7 +222,7 @@ const Home = (): JSX.Element => {
               style={normalItemStyle}
               onClick={handlePause}
             >
-              暂停⏸️
+              暂停
             </BoxContainerItem>
           </BoxContainer>
         </div>
