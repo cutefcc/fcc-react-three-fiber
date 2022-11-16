@@ -28,6 +28,18 @@ export const Left = styled.div`
   justify-content: space-between;
   z-index: 10;
 `;
+export const Right = styled.div`
+  position: absolute;
+  top: 6vh;
+  right: 0;
+  margin: 1vh;
+  width: 20vw;
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+`;
 export const Title = styled.div`
   height: 24px;
   margin-bottom: 12px;

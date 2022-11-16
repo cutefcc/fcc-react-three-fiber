@@ -1,12 +1,13 @@
 import { memo, useEffect, useRef, Suspense } from 'react';
 import gsap from 'gsap';
-// import { Container } from './style';
+import { Mesh } from 'three';
 import Header from '@components/Header';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, ObjectMap } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Html, useProgress, useGLTF } from '@react-three/drei';
 import { Physics, usePlane, useBox } from '@react-three/cannon';
-import { Left, Title, Button, ButtonPause, BoxContainer, BoxContainerItem } from './style';
+import { Left, Right, Title, Button, ButtonPause, BoxContainer, BoxContainerItem } from './style';
 import { useImmer } from '@hooks/useImmer';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 const config = [
   {
@@ -65,13 +66,13 @@ const normalItemStyle = {
 const Home = (): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currNav, setCurrNav] = useImmer<number>(0);
+  const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
+  const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
 
   const handleNavClick = (index: number) => () => {
     setCurrNav(index);
   };
-  useEffect(() => {
-    // console.log(containerRef.current);
-  }, []);
+  useEffect(() => {}, []);
   const handleInFull = () => {
     console.log('handleFull');
     // make the element go to full-screen mode
@@ -97,22 +98,15 @@ const Home = (): JSX.Element => {
         console.log('error', error);
       });
   };
+
   const Loader = () => {
     const { active, progress, errors, item, loaded, total } = useProgress();
     return <Html center>{progress} % loaded</Html>;
   };
   const LoadAsyncModel = () => {
-    const glb = useGLTF(`/public/models/Base.glb`);
     console.log('glb', glb);
-    // 开启shadow
+    // enable shadow
     glb.nodes.mesh_0.castShadow = true;
-    gsap.to(glb.scene.rotation, {
-      y: Math.PI * 2,
-      duration: 10,
-      repeat: -1,
-      ease: 'linear',
-      // yoyo: true,
-    });
     return (
       <primitive
         castShadow
@@ -122,6 +116,24 @@ const Home = (): JSX.Element => {
         position={[0, 4, 0]}
       ></primitive>
     );
+  };
+  const handleBegin = () => {
+    if (gsapRotation) {
+      gsapRotation.play();
+      return;
+    }
+    setGsapRotation(
+      gsap.to(glb.scene.rotation, {
+        y: Math.PI * 2, // 旋转一圈
+        duration: 10, // 旋转一圈的时间
+        repeat: -1, // 无限循环
+        ease: 'linear', //
+        // yoyo: true, // 反向播放
+      })
+    );
+  };
+  const handlePause = () => {
+    gsapRotation?.pause();
   };
   const Floor = () => {
     // 用了这种方式，rotation position 只能在里面设置，不能写在mesh上（不生效）
@@ -133,67 +145,9 @@ const Home = (): JSX.Element => {
     return (
       <mesh ref={plane} receiveShadow>
         <planeGeometry attach="geometry" args={[40, 40]} />
-        <meshStandardMaterial attach="material" color="#cccccc" />
+        <meshStandardMaterial attach="material" color="#666" />
       </mesh>
     );
-  };
-  const Box = (props: BoxProps) => {
-    const [ref, api] = useBox<THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>>(() => ({
-      mass: 1,
-      position: props.position,
-    }));
-    return (
-      <mesh
-        ref={ref}
-        castShadow
-        onClick={e => {
-          // console.log('click', e);
-          ref.current?.material.color.set('green');
-        }}
-        onPointerOver={e => {
-          ref.current?.material.color.set('#f60');
-        }}
-        // onPointerOut={e => {
-        //   ref.current?.material.color.set('hotpink');
-        // }}
-      >
-        <boxGeometry attach="geometry" args={[1, 1, 1]} />
-        <meshStandardMaterial attach="material" color="hotpink" />
-      </mesh>
-    );
-  };
-  const renderBox = () => {
-    {
-      /* 创建几个个Box */
-    }
-    return Array.from({ length: 30 }, (_, i) => i).map((_, i) => {
-      let x = 0,
-        y = 0,
-        z = 0;
-      if (i === 0) {
-        x = 4;
-        y = 15;
-        z = 0;
-      } else if (i === 1) {
-        x = 0;
-        y = 15;
-        z = 4;
-      } else if (i === 2) {
-        x = -4;
-        y = 15;
-        z = 0;
-      } else if (i === 3) {
-        x = 0;
-        y = 15;
-        z = -4;
-      } else {
-        x = Math.random() * 10 - 5;
-        y = Math.random() * 10;
-        z = Math.random() * 10 - 5;
-      }
-
-      return <Box key={i} position={[x, y, z]} />;
-    });
   };
   return (
     <div ref={containerRef} className="bg-[#475569]">
@@ -252,6 +206,27 @@ const Home = (): JSX.Element => {
           </Physics>
         </Canvas>
       </div>
+      <Right>
+        <div className="relative">
+          <Title className="">操作</Title>
+          <BoxContainer>
+            <BoxContainerItem
+              className={`p-5 mb-10 rounded-[4px]`}
+              style={normalItemStyle}
+              onClick={handleBegin}
+            >
+              开始
+            </BoxContainerItem>
+            <BoxContainerItem
+              className={`p-5 mb-10 rounded-[4px]`}
+              style={normalItemStyle}
+              onClick={handlePause}
+            >
+              暂停⏸️
+            </BoxContainerItem>
+          </BoxContainer>
+        </div>
+      </Right>
     </div>
   );
 };
