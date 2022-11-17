@@ -78,8 +78,8 @@ export const BoxContainerItem = styled.div`
   align-items: center;
   cursor: pointer;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  // background: rgba(81, 99, 140, 0.7);
+  color: rgba(255, 255, 255, 1);
+  background: rgba(81, 99, 140, 0.7);
   :hover {
     background: rgba(81, 99, 140, 0.2);
   }

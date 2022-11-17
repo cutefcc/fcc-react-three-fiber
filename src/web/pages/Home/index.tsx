@@ -1,14 +1,22 @@
-import { memo, useEffect, useRef, Suspense } from 'react';
+import { memo, useEffect, useRef, Suspense, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { Mesh } from 'three';
+import * as THREE from 'three';
 import Header from '@components/Header';
 import { Canvas, ObjectMap } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Html, useProgress, useGLTF } from '@react-three/drei';
+import {
+  OrbitControls,
+  PerspectiveCamera,
+  Html,
+  useProgress,
+  useGLTF,
+  useTexture,
+} from '@react-three/drei';
 import { Physics, usePlane, useBox } from '@react-three/cannon';
 import { Left, Right, Title, Button, ButtonPause, BoxContainer, BoxContainerItem } from './style';
 import { useImmer } from '@hooks/useImmer';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-
+const planeColor = new THREE.Color(0x000000);
 const config = [
   {
     key: 1,
@@ -66,6 +74,7 @@ const normalItemStyle = {
 const Home = (): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currNav, setCurrNav] = useImmer<number>(0);
+  const [showWalls, setShowWalls] = useImmer<boolean>(true);
   const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
   const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
 
@@ -113,7 +122,7 @@ const Home = (): JSX.Element => {
         receiveShadow
         object={glb.scene}
         scale={[0.04, 0.04, 0.04]}
-        position={[0, 4, 0]}
+        position={[0, 5, 0]}
       ></primitive>
     );
   };
@@ -135,6 +144,9 @@ const Home = (): JSX.Element => {
   const handlePause = () => {
     gsapRotation?.pause();
   };
+  const handleWalls = () => {
+    setShowWalls(!showWalls);
+  };
   const Floor = () => {
     // 用了这种方式，rotation position 只能在里面设置，不能写在mesh上（不生效）
     const [plane] = usePlane<THREE.Mesh>(() => ({
@@ -142,11 +154,100 @@ const Home = (): JSX.Element => {
       rotation: [-Math.PI / 2, 0, 0],
       position: [0, -0.5, 0],
     }));
+    const texture = useTexture('/public/textures/TexturesCom_FloorsCheckerboard0047_1_S.jpg');
+    useLayoutEffect(() => {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(10, 10); // x y 都是 100 * 0.5 = 50 个texture
+    }, [texture]);
     return (
       <mesh ref={plane} receiveShadow>
-        <planeGeometry attach="geometry" args={[40, 40]} />
-        <meshStandardMaterial attach="material" color="#666" />
+        <planeGeometry attach="geometry" args={[100, 100]} />
+        <meshStandardMaterial
+          attach="material"
+          emissive={planeColor.set(0x000000)}
+          // color={planeColor}
+          map={texture}
+          emissiveMap={texture}
+          // emissiveIntensity={1}
+        />
       </mesh>
+    );
+  };
+  const Walls = () => {
+    const [plane] = usePlane<THREE.Mesh>(() => ({
+      mass: 0,
+      rotation: [0, -Math.PI / 2, 0],
+      position: [50, 49.5, 0],
+    }));
+    const [plane1] = usePlane<THREE.Mesh>(() => ({
+      mass: 0,
+      rotation: [0, Math.PI / 2, 0],
+      position: [-50, 49.5, 0],
+    }));
+    const [plane2] = usePlane<THREE.Mesh>(() => ({
+      mass: 0,
+      rotation: [0, Math.PI, 0],
+      position: [0, 49.5, 50],
+    }));
+    const [plane3] = usePlane<THREE.Mesh>(() => ({
+      mass: 0,
+      rotation: [0, 0, 0],
+      position: [0, 49.5, -50],
+    }));
+    const textureWall = useTexture(
+      '/public/textures/TexturesCom_BrickJapanese0123_2_seamless_S.jpg'
+    );
+    useLayoutEffect(() => {
+      textureWall.wrapS = textureWall.wrapT = THREE.RepeatWrapping;
+      textureWall.repeat.set(4, 4); // x y 都是 100 * 0.5 = 50 个texture
+    }, [textureWall]);
+    return (
+      <>
+        <mesh ref={plane} receiveShadow>
+          <planeGeometry attach="geometry" args={[100, 100]} />
+          <meshStandardMaterial
+            attach="material"
+            emissive={planeColor.set(0xcccccc)}
+            // color={planeColor}
+            map={textureWall}
+            emissiveMap={textureWall}
+            // emissiveIntensity={1}
+          />
+        </mesh>
+        <mesh ref={plane1} receiveShadow>
+          <planeGeometry attach="geometry" args={[100, 100]} />
+          <meshStandardMaterial
+            attach="material"
+            emissive={planeColor.set(0xcccccc)}
+            // color={planeColor}
+            map={textureWall}
+            emissiveMap={textureWall}
+            // emissiveIntensity={1}
+          />
+        </mesh>
+        <mesh ref={plane2} receiveShadow>
+          <planeGeometry attach="geometry" args={[100, 100]} />
+          <meshStandardMaterial
+            attach="material"
+            emissive={planeColor.set(0xcccccc)}
+            // color={planeColor}
+            map={textureWall}
+            emissiveMap={textureWall}
+            // emissiveIntensity={1}
+          />
+        </mesh>
+        <mesh ref={plane3} receiveShadow>
+          <planeGeometry attach="geometry" args={[100, 100]} />
+          <meshStandardMaterial
+            attach="material"
+            emissive={planeColor.set(0xcccccc)}
+            // color={planeColor}
+            map={textureWall}
+            emissiveMap={textureWall}
+            // emissiveIntensity={1}
+          />
+        </mesh>
+      </>
     );
   };
   return (
@@ -186,7 +287,7 @@ const Home = (): JSX.Element => {
           {/* // 平行光1 */}
           <directionalLight
             position={[10, 10, 10]}
-            intensity={0.6}
+            intensity={0.7}
             castShadow={true}
             color={'#fff'}
           />
@@ -203,6 +304,7 @@ const Home = (): JSX.Element => {
           <Physics>
             {/* {renderBox()} */}
             <Floor />
+            {showWalls && <Walls />}
           </Physics>
         </Canvas>
       </div>
@@ -223,6 +325,13 @@ const Home = (): JSX.Element => {
               onClick={handlePause}
             >
               暂停
+            </BoxContainerItem>
+            <BoxContainerItem
+              className={`p-5 mb-10 rounded-[4px]`}
+              style={normalItemStyle}
+              onClick={handleWalls}
+            >
+              {showWalls ? '隐藏房间' : '显示房间'}
             </BoxContainerItem>
           </BoxContainer>
         </div>
