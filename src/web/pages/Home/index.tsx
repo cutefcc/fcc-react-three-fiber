@@ -11,6 +11,8 @@ import {
   useProgress,
   useGLTF,
   useTexture,
+  useKTX2,
+  Text,
 } from '@react-three/drei';
 import { Physics, usePlane, useBox } from '@react-three/cannon';
 import { Left, Right, Title, Button, ButtonPause, BoxContainer, BoxContainerItem } from './style';
@@ -74,7 +76,10 @@ const normalItemStyle = {
 const Home = (): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currNav, setCurrNav] = useImmer<number>(0);
-  const [showWalls, setShowWalls] = useImmer<boolean>(true);
+  const [showWalls, setShowWalls] = useImmer<boolean>(true); // 是否显示墙壁
+  const [showModel, setShowModel] = useImmer<boolean>(true); // 是否显示主模型
+  const [showFloor, setShowFloor] = useImmer<boolean>(true); // 是否显示地板
+  const [isRotate, setIsRotate] = useImmer<boolean>(false); // 是否旋转状态
   const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
   const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
 
@@ -112,11 +117,11 @@ const Home = (): JSX.Element => {
     const { active, progress, errors, item, loaded, total } = useProgress();
     return <Html center>{progress} % loaded</Html>;
   };
-  const LoadAsyncModel = () => {
+  const LoadAsyncModel = memo(() => {
     console.log('glb', glb);
     // enable shadow
     glb.nodes.mesh_0.castShadow = true;
-    return (
+    return showModel ? (
       <primitive
         castShadow
         receiveShadow
@@ -124,9 +129,10 @@ const Home = (): JSX.Element => {
         scale={[0.04, 0.04, 0.04]}
         position={[0, 5, 0]}
       ></primitive>
-    );
-  };
+    ) : null;
+  });
   const handleBegin = () => {
+    // setIsRotate(true);
     if (gsapRotation) {
       gsapRotation.play();
       return;
@@ -136,16 +142,23 @@ const Home = (): JSX.Element => {
         y: Math.PI * 2, // 旋转一圈
         duration: 10, // 旋转一圈的时间
         repeat: -1, // 无限循环
-        ease: 'linear', //
+        ease: 'linear', // 线性
         // yoyo: true, // 反向播放
       })
     );
   };
   const handlePause = () => {
     gsapRotation?.pause();
+    // setIsRotate(false);
   };
   const handleWalls = () => {
     setShowWalls(!showWalls);
+  };
+  const handleModel = () => {
+    setShowModel(!showModel);
+  };
+  const handleFloor = () => {
+    setShowFloor(!showFloor);
   };
   const Floor = () => {
     // 用了这种方式，rotation position 只能在里面设置，不能写在mesh上（不生效）
@@ -159,7 +172,7 @@ const Home = (): JSX.Element => {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(10, 10); // x y 都是 100 * 0.5 = 50 个texture
     }, [texture]);
-    return (
+    return showFloor ? (
       <mesh ref={plane} receiveShadow>
         <planeGeometry attach="geometry" args={[100, 100]} />
         <meshStandardMaterial
@@ -171,7 +184,7 @@ const Home = (): JSX.Element => {
           // emissiveIntensity={1}
         />
       </mesh>
-    );
+    ) : null;
   };
   const Walls = () => {
     const [plane] = usePlane<THREE.Mesh>(() => ({
@@ -197,6 +210,7 @@ const Home = (): JSX.Element => {
     const textureWall = useTexture(
       '/public/textures/TexturesCom_BrickJapanese0123_2_seamless_S.jpg'
     );
+    const doorKtx = useKTX2('/public/textures/door1.ktx2');
     useLayoutEffect(() => {
       textureWall.wrapS = textureWall.wrapT = THREE.RepeatWrapping;
       textureWall.repeat.set(4, 4); // x y 都是 100 * 0.5 = 50 个texture
@@ -205,6 +219,14 @@ const Home = (): JSX.Element => {
       <>
         <mesh ref={plane} receiveShadow>
           <planeGeometry attach="geometry" args={[100, 100]} />
+          {/* <meshBasicMaterial
+            attach="material"
+            // emissive={planeColor.set(0xcccccc)} // 发光颜色
+            color={planeColor} // 材质的颜色，默认设置为白色 (0xffffff)。
+            map={doorKtx} // 纹理贴图
+            // emissiveMap={doorKtx} // 发光贴图。默认为空。发光贴图颜色由发光颜色和发射强度调制。如果您有自发光贴图，请务必将自发光颜色设置为黑色以外的颜色
+            // emissiveIntensity={0} // 发射光的强度。调制发光颜色。默认为 1
+          /> */}
           <meshStandardMaterial
             attach="material"
             emissive={planeColor.set(0xcccccc)}
@@ -250,11 +272,10 @@ const Home = (): JSX.Element => {
       </>
     );
   };
-  return (
-    <div ref={containerRef} className="bg-[#475569]">
-      <Header onFullScreen={handleInFull} onExitFullScreen={handleExitFull} />
+  const LeftComponent = () => {
+    return (
       <Left>
-        <div className="relative">
+        <div className="relative" id="left">
           <Title className="">
             场景导航
             <Button></Button>
@@ -275,6 +296,10 @@ const Home = (): JSX.Element => {
           </BoxContainer>
         </div>
       </Left>
+    );
+  };
+  const MiddleComponent = () => {
+    return (
       <div className="w-full h-screen">
         <Canvas shadows={true}>
           {/* 可以改变position来调整camera的距离 和 方向，起到场景放大缩小功能 */}
@@ -283,6 +308,8 @@ const Home = (): JSX.Element => {
           <OrbitControls />
           {/* // 环境光 */}
           <ambientLight />
+          {/* // 坐标轴 */}
+          <axesHelper />
           {/* <pointLight position={[10, 10, 10]} /> */}
           {/* // 平行光1 */}
           <directionalLight
@@ -293,11 +320,11 @@ const Home = (): JSX.Element => {
           />
           {/* // 平行光2 */}
           {/* <directionalLight
-            position={[-10, 10, -10]}
-            intensity={0.6}
-            castShadow={true}
-            color={'#Fff'}
-          /> */}
+        position={[-10, 10, -10]}
+        intensity={0.6}
+        castShadow={true}
+        color={'#Fff'}
+      /> */}
           <Suspense fallback={<Loader />}>
             <LoadAsyncModel />
           </Suspense>
@@ -308,24 +335,33 @@ const Home = (): JSX.Element => {
           </Physics>
         </Canvas>
       </div>
+    );
+  };
+  const RightComponent = () => {
+    return (
       <Right>
-        <div className="relative">
+        <div className="relative" id="right">
           <Title className="">操作</Title>
           <BoxContainer>
-            <BoxContainerItem
-              className={`p-5 mb-10 rounded-[4px]`}
-              style={normalItemStyle}
-              onClick={handleBegin}
-            >
-              开始
-            </BoxContainerItem>
-            <BoxContainerItem
-              className={`p-5 mb-10 rounded-[4px]`}
-              style={normalItemStyle}
-              onClick={handlePause}
-            >
-              暂停
-            </BoxContainerItem>
+            {showModel && (
+              <BoxContainerItem
+                className={`p-5 mb-10 rounded-[4px]`}
+                style={normalItemStyle}
+                onClick={handleBegin}
+              >
+                开始
+              </BoxContainerItem>
+            )}
+            {showModel && (
+              <BoxContainerItem
+                className={`p-5 mb-10 rounded-[4px]`}
+                style={normalItemStyle}
+                onClick={handlePause}
+              >
+                暂停
+              </BoxContainerItem>
+            )}
+
             <BoxContainerItem
               className={`p-5 mb-10 rounded-[4px]`}
               style={normalItemStyle}
@@ -333,9 +369,31 @@ const Home = (): JSX.Element => {
             >
               {showWalls ? '隐藏房间' : '显示房间'}
             </BoxContainerItem>
+            <BoxContainerItem
+              className={`p-5 mb-10 rounded-[4px]`}
+              style={normalItemStyle}
+              onClick={handleModel}
+            >
+              {showModel ? '隐藏模型' : '显示模型'}
+            </BoxContainerItem>
+            <BoxContainerItem
+              className={`p-5 mb-10 rounded-[4px]`}
+              style={normalItemStyle}
+              onClick={handleFloor}
+            >
+              {showFloor ? '隐藏Floor' : '显示Floor'}
+            </BoxContainerItem>
           </BoxContainer>
         </div>
       </Right>
+    );
+  };
+  return (
+    <div ref={containerRef} className="bg-[#475569]">
+      <Header onFullScreen={handleInFull} onExitFullScreen={handleExitFull} />
+      <LeftComponent />
+      <MiddleComponent />
+      <RightComponent />
     </div>
   );
 };
