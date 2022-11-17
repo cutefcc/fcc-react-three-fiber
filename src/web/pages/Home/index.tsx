@@ -377,28 +377,28 @@ const Home = (): JSX.Element => {
           <BoxContainer>
             {showModel && (
               <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleBegin}>
-                rotate
+                开始旋转
               </BoxContainerItem>
             )}
             {showModel && (
               <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handlePause}>
-                pause rotate
+                暂停旋转
               </BoxContainerItem>
             )}
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleWalls}>
-              {showWalls ? 'hidden walls' : 'show walls'}
+              {showWalls ? '隐藏墙壁' : '显示墙壁'}
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleModel}>
-              {showModel ? 'hidden model' : 'show model'}
+              {showModel ? '隐藏模型' : '显示模型'}
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleFloor}>
-              {showFloor ? 'hidden floor' : 'show floor'}
+              {showFloor ? '隐藏地板' : '显示地板'}
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleMusic}>
-              bgm open
+              播放bgm
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleStopMusic}>
-              bgm pause
+              暂停bgm
             </BoxContainerItem>
           </BoxContainer>
         </div>
