@@ -36,10 +36,10 @@ const Header = (props: Props) => {
 
   return (
     <TopHeader className="h-[6vh] w-full absolute text-center z-10 leading-[6vh] bg-cover">
-      {/* <span className="text-[28px]">WZ8涡轴发动机工作原理教学系统</span> */}
-      <span className="text-[28px]" id="w28">
+      <span className="text-[28px]">WZ8涡轴发动机工作原理教学系统</span>
+      {/* <span className="text-[28px]" id="w28">
         WZ8
-      </span>
+      </span> */}
       <div className="absolute right-80 top-0">{time}</div>
       <FullScreen
         className="absolute w-40 h-40 cursor-pointer right-20"

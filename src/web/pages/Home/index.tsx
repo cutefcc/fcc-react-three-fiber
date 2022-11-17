@@ -13,11 +13,13 @@ import {
   useTexture,
   useKTX2,
   Text,
+  PositionalAudio,
 } from '@react-three/drei';
 import { Physics, usePlane, useBox } from '@react-three/cannon';
-import { Left, Right, Title, Button, ButtonPause, BoxContainer, BoxContainerItem } from './style';
+import { Left, Right, Title, SvgButton, BoxContainer, BoxContainerItem } from './style';
 import { useImmer } from '@hooks/useImmer';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+// import Button from '@mui/material/Button';
 const planeColor = new THREE.Color(0x000000);
 const config = [
   {
@@ -66,15 +68,10 @@ const config = [
     },
   },
 ];
-const currItemStyle = {
-  background: 'rgba(81, 99, 140, 0.8)',
-};
-const normalItemStyle = {
-  background: 'rgba(81, 99, 140, 0.3)',
-};
 
 const Home = (): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sound = useRef(null);
   const [currNav, setCurrNav] = useImmer<number>(0);
   const [showWalls, setShowWalls] = useImmer<boolean>(true); // 是否显示墙壁
   const [showModel, setShowModel] = useImmer<boolean>(true); // 是否显示主模型
@@ -87,6 +84,13 @@ const Home = (): JSX.Element => {
     setCurrNav(index);
   };
   useEffect(() => {}, []);
+  const handleMusic = () => {
+    sound?.current?.play();
+  };
+  const handleStopMusic = () => {
+    sound?.current?.pause(); // 暂停
+    // sound?.current?.stop(); // 停止
+  };
   const handleInFull = () => {
     console.log('handleFull');
     // make the element go to full-screen mode
@@ -281,7 +285,7 @@ const Home = (): JSX.Element => {
         <div className="relative" id="left">
           <Title className="">
             场景导航
-            <Button></Button>
+            <SvgButton></SvgButton>
           </Title>
           <BoxContainer>
             {config.map((item, index) => {
@@ -289,7 +293,6 @@ const Home = (): JSX.Element => {
                 <BoxContainerItem
                   key={item.key}
                   className={`p-5 mb-10 rounded-[4px]`}
-                  style={index === currNav ? currItemStyle : normalItemStyle}
                   onClick={handleNavClick(index)}
                 >
                   {item.text}
@@ -304,7 +307,6 @@ const Home = (): JSX.Element => {
   const SkyBox = () => {
     // const doorKtx = useKTX2('/public/textures/door1.ktx2');
     const texture = useTexture('/public/textures/TexturesCom_ReclaimedWoodWallColor_header4.jpg');
-
     return (
       <mesh>
         <sphereGeometry attach="geometry" args={[50, 50, 50]} />
@@ -334,10 +336,18 @@ const Home = (): JSX.Element => {
           {/* <pointLight position={[10, 10, 10]} /> */}
           {/* // 平行光1 */}
           <directionalLight
-            position={[10, 10, 10]}
+            position={[10, 10, 15]}
             intensity={0.7}
             castShadow={true}
             color={'#fff'}
+          />
+          <PositionalAudio
+            ref={sound}
+            url="/public/music/please-calm-my-mind-125566.mp3"
+            distance={1}
+            // loop
+            // autoplay
+            // {...props} // All THREE.PositionalAudio props are valid
           />
           {/*  平行光2 */}
           {/* <directionalLight
@@ -366,44 +376,29 @@ const Home = (): JSX.Element => {
           <Title className="">操作</Title>
           <BoxContainer>
             {showModel && (
-              <BoxContainerItem
-                className={`p-5 mb-10 rounded-[4px]`}
-                style={normalItemStyle}
-                onClick={handleBegin}
-              >
-                开始
+              <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleBegin}>
+                rotate
               </BoxContainerItem>
             )}
             {showModel && (
-              <BoxContainerItem
-                className={`p-5 mb-10 rounded-[4px]`}
-                style={normalItemStyle}
-                onClick={handlePause}
-              >
-                暂停
+              <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handlePause}>
+                pause rotate
               </BoxContainerItem>
             )}
-
-            <BoxContainerItem
-              className={`p-5 mb-10 rounded-[4px]`}
-              style={normalItemStyle}
-              onClick={handleWalls}
-            >
-              {showWalls ? '隐藏房间' : '显示房间'}
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleWalls}>
+              {showWalls ? 'hidden walls' : 'show walls'}
             </BoxContainerItem>
-            <BoxContainerItem
-              className={`p-5 mb-10 rounded-[4px]`}
-              style={normalItemStyle}
-              onClick={handleModel}
-            >
-              {showModel ? '隐藏模型' : '显示模型'}
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleModel}>
+              {showModel ? 'hidden model' : 'show model'}
             </BoxContainerItem>
-            <BoxContainerItem
-              className={`p-5 mb-10 rounded-[4px]`}
-              style={normalItemStyle}
-              onClick={handleFloor}
-            >
-              {showFloor ? '隐藏Floor' : '显示Floor'}
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleFloor}>
+              {showFloor ? 'hidden floor' : 'show floor'}
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleMusic}>
+              bgm open
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleStopMusic}>
+              bgm pause
             </BoxContainerItem>
           </BoxContainer>
         </div>

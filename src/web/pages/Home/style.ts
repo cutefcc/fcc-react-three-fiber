@@ -50,7 +50,7 @@ export const Title = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export const Button = styled.div`
+export const SvgButton = styled.div`
   width: 18px;
   height: 18px;
   margin-left: 10px;
@@ -58,9 +58,9 @@ export const Button = styled.div`
   background-size: 100%;
   cursor: pointer;
 `;
-export const ButtonPause = styled.div`
-  background-image: url('/public/images/pause.svg');
-`;
+// export const ButtonPause = styled.div`
+//   background-image: url('/public/images/pause.svg');
+// `;
 export const BoxContainer = styled.div`
   height: calc(100% - 36px);
   width: 100%;
@@ -79,8 +79,8 @@ export const BoxContainerItem = styled.div`
   cursor: pointer;
   font-size: 14px;
   color: rgba(255, 255, 255, 1);
-  background: rgba(81, 99, 140, 0.7);
+  background: rgba(81, 99, 140, 0.4);
   :hover {
-    background: rgba(81, 99, 140, 0.2);
+    background: rgba(81, 99, 140, 0.8);
   }
 `;
