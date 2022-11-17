@@ -167,10 +167,11 @@ const Home = (): JSX.Element => {
       rotation: [-Math.PI / 2, 0, 0],
       position: [0, -0.5, 0],
     }));
-    const texture = useTexture('/public/textures/TexturesCom_FloorsCheckerboard0047_1_S.jpg');
+    // const texture = useTexture('/public/textures/TexturesCom_FloorsCheckerboard0047_1_S.jpg');
+    const texture = useTexture('/public/textures/floor01.jpg');
     useLayoutEffect(() => {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(10, 10); // x y 都是 100 * 0.5 = 50 个texture
+      texture.repeat.set(5, 5); // x y 都是 100 * 0.5 = 50 个texture
     }, [texture]);
     return showFloor ? (
       <mesh ref={plane} receiveShadow>
@@ -210,10 +211,12 @@ const Home = (): JSX.Element => {
     const textureWall = useTexture(
       '/public/textures/TexturesCom_BrickJapanese0123_2_seamless_S.jpg'
     );
+    // const textureWall = useTexture('/public/textures/wall2.jpg');
     const doorKtx = useKTX2('/public/textures/door1.ktx2');
     useLayoutEffect(() => {
       textureWall.wrapS = textureWall.wrapT = THREE.RepeatWrapping;
-      textureWall.repeat.set(4, 4); // x y 都是 100 * 0.5 = 50 个texture
+      textureWall.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
+      // textureWall.repeat.set(0.5, 0.5); // x y 都是 100 * 0.5 = 50 个texture
     }, [textureWall]);
     return (
       <>
@@ -298,6 +301,24 @@ const Home = (): JSX.Element => {
       </Left>
     );
   };
+  const SkyBox = () => {
+    // const doorKtx = useKTX2('/public/textures/door1.ktx2');
+    const texture = useTexture('/public/textures/TexturesCom_ReclaimedWoodWallColor_header4.jpg');
+
+    return (
+      <mesh>
+        <sphereGeometry attach="geometry" args={[50, 50, 50]} />
+        {/* 带自发光的天空盒 */}
+        <meshPhongMaterial
+          attach="material"
+          // emissive={new THREE.Color(0xff2190)}
+          // emissiveIntensity={0.1}
+          side={THREE.BackSide}
+          map={texture}
+        />
+      </mesh>
+    );
+  };
   const MiddleComponent = () => {
     return (
       <div className="w-full h-screen">
@@ -332,6 +353,7 @@ const Home = (): JSX.Element => {
             {/* {renderBox()} */}
             <Floor />
             {showWalls && <Walls />}
+            {/* <SkyBox /> */}
           </Physics>
         </Canvas>
       </div>
