@@ -339,7 +339,7 @@ const Home = (): JSX.Element => {
             castShadow={true}
             color={'#fff'}
           />
-          {/* // 平行光2 */}
+          {/*  平行光2 */}
           {/* <directionalLight
         position={[-10, 10, -10]}
         intensity={0.6}
