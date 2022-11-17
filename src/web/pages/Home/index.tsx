@@ -79,7 +79,7 @@ const Home = (): JSX.Element => {
   const [showWalls, setShowWalls] = useImmer<boolean>(true); // 是否显示墙壁
   const [showModel, setShowModel] = useImmer<boolean>(true); // 是否显示主模型
   const [showFloor, setShowFloor] = useImmer<boolean>(true); // 是否显示地板
-  const [isRotate, setIsRotate] = useImmer<boolean>(false); // 是否旋转状态
+  // const [isRotate, setIsRotate] = useImmer<boolean>(false); // 是否旋转状态
   const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
   const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
 
