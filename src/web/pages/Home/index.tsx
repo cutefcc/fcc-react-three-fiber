@@ -18,6 +18,7 @@ import {
 import { Physics, usePlane, useBox } from '@react-three/cannon';
 import { Left, Right, Title, SvgButton, BoxContainer, BoxContainerItem } from './style';
 import { useImmer } from '@hooks/useImmer';
+import Floor from './Floor';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 // import Button from '@mui/material/Button';
 const planeColor = new THREE.Color(0x000000);
@@ -75,7 +76,7 @@ const Home = (): JSX.Element => {
   const [currNav, setCurrNav] = useImmer<number>(0);
   const [showWalls, setShowWalls] = useImmer<boolean>(true); // 是否显示墙壁
   const [showModel, setShowModel] = useImmer<boolean>(true); // 是否显示主模型
-  const [showFloor, setShowFloor] = useImmer<boolean>(true); // 是否显示地板
+  const [showFloor, setShowFloor] = useImmer<{ show: boolean }>({ show: true }); // 是否显示地板
   // const [isRotate, setIsRotate] = useImmer<boolean>(false); // 是否旋转状态
   const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
   const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
@@ -92,7 +93,6 @@ const Home = (): JSX.Element => {
     // sound?.current?.stop(); // 停止
   };
   const handleInFull = () => {
-    console.log('handleFull');
     // make the element go to full-screen mode
     containerRef?.current
       ?.requestFullscreen()
@@ -122,7 +122,6 @@ const Home = (): JSX.Element => {
     return <Html center>{progress} % loaded</Html>;
   };
   const LoadAsyncModel = memo(() => {
-    console.log('glb', glb);
     // enable shadow
     glb.nodes.mesh_0.castShadow = true;
     return showModel ? (
@@ -162,34 +161,9 @@ const Home = (): JSX.Element => {
     setShowModel(!showModel);
   };
   const handleFloor = () => {
-    setShowFloor(!showFloor);
-  };
-  const Floor = () => {
-    // 用了这种方式，rotation position 只能在里面设置，不能写在mesh上（不生效）
-    const [plane] = usePlane<THREE.Mesh>(() => ({
-      mass: 0,
-      rotation: [-Math.PI / 2, 0, 0],
-      position: [0, -0.5, 0],
-    }));
-    // const texture = useTexture('/public/textures/TexturesCom_FloorsCheckerboard0047_1_S.jpg');
-    const texture = useTexture('/public/textures/floor01.jpg');
-    useLayoutEffect(() => {
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(5, 5); // x y 都是 100 * 0.5 = 50 个texture
-    }, [texture]);
-    return showFloor ? (
-      <mesh ref={plane} receiveShadow>
-        <planeGeometry attach="geometry" args={[100, 100]} />
-        <meshStandardMaterial
-          attach="material"
-          emissive={planeColor.set(0x000000)}
-          // color={planeColor}
-          map={texture}
-          emissiveMap={texture}
-          // emissiveIntensity={1}
-        />
-      </mesh>
-    ) : null;
+    setShowFloor(draft => {
+      draft.show = !draft.show;
+    });
   };
   const Walls = () => {
     const [plane] = usePlane<THREE.Mesh>(() => ({
@@ -215,13 +189,25 @@ const Home = (): JSX.Element => {
     const textureWall = useTexture(
       '/public/textures/TexturesCom_BrickJapanese0123_2_seamless_S.jpg'
     );
+    const textureWall1 = useTexture('/public/images/WechatIMG8.jpeg');
+    const textureWall2 = useTexture('/public/images/WechatIMG9.jpeg');
+    const textureWall3 = useTexture('/public/images/WechatIMG10.jpeg');
+    const textureWall4 = useTexture('/public/images/WechatIMG11.jpeg');
     // const textureWall = useTexture('/public/textures/wall2.jpg');
-    const doorKtx = useKTX2('/public/textures/door1.ktx2');
+    // const doorKtx = useKTX2('/public/textures/door1.ktx2');
     useLayoutEffect(() => {
-      textureWall.wrapS = textureWall.wrapT = THREE.RepeatWrapping;
-      textureWall.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
+      // textureWall.wrapS = textureWall.wrapT = THREE.RepeatWrapping;
+      // textureWall.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
+      textureWall1.wrapS = textureWall1.wrapT = THREE.RepeatWrapping;
+      // textureWall1.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
+      textureWall2.wrapS = textureWall2.wrapT = THREE.RepeatWrapping;
+      // textureWall2.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
+      textureWall3.wrapS = textureWall3.wrapT = THREE.RepeatWrapping;
+      // textureWall3.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
+      textureWall4.wrapS = textureWall4.wrapT = THREE.RepeatWrapping;
+      // textureWall4.repeat.set(3, 3); // x y 都是 100 * 0.5 = 50 个texture
       // textureWall.repeat.set(0.5, 0.5); // x y 都是 100 * 0.5 = 50 个texture
-    }, [textureWall]);
+    }, [textureWall1, textureWall2, textureWall3, textureWall4]);
     return (
       <>
         <mesh ref={plane} receiveShadow>
@@ -238,8 +224,8 @@ const Home = (): JSX.Element => {
             attach="material"
             emissive={planeColor.set(0xcccccc)}
             // color={planeColor}
-            map={textureWall}
-            emissiveMap={textureWall}
+            map={textureWall1}
+            emissiveMap={textureWall1}
             // emissiveIntensity={1}
           />
         </mesh>
@@ -249,8 +235,8 @@ const Home = (): JSX.Element => {
             attach="material"
             emissive={planeColor.set(0xcccccc)}
             // color={planeColor}
-            map={textureWall}
-            emissiveMap={textureWall}
+            map={textureWall2}
+            emissiveMap={textureWall2}
             // emissiveIntensity={1}
           />
         </mesh>
@@ -260,8 +246,8 @@ const Home = (): JSX.Element => {
             attach="material"
             emissive={planeColor.set(0xcccccc)}
             // color={planeColor}
-            map={textureWall}
-            emissiveMap={textureWall}
+            map={textureWall3}
+            emissiveMap={textureWall3}
             // emissiveIntensity={1}
           />
         </mesh>
@@ -271,8 +257,8 @@ const Home = (): JSX.Element => {
             attach="material"
             emissive={planeColor.set(0xcccccc)}
             // color={planeColor}
-            map={textureWall}
-            emissiveMap={textureWall}
+            map={textureWall4}
+            emissiveMap={textureWall4}
             // emissiveIntensity={1}
           />
         </mesh>
@@ -349,19 +335,11 @@ const Home = (): JSX.Element => {
             // autoplay
             // {...props} // All THREE.PositionalAudio props are valid
           />
-          {/*  平行光2 */}
-          {/* <directionalLight
-        position={[-10, 10, -10]}
-        intensity={0.6}
-        castShadow={true}
-        color={'#Fff'}
-      /> */}
           <Suspense fallback={<Loader />}>
             <LoadAsyncModel />
           </Suspense>
           <Physics>
-            {/* {renderBox()} */}
-            <Floor />
+            <Floor showFloor={showFloor} />
             {showWalls && <Walls />}
             {/* <SkyBox /> */}
           </Physics>
@@ -392,7 +370,7 @@ const Home = (): JSX.Element => {
               {showModel ? '隐藏模型' : '显示模型'}
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleFloor}>
-              {showFloor ? '隐藏地板' : '显示地板'}
+              {showFloor.show ? '隐藏地板' : '显示地板'}
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleMusic}>
               播放bgm
