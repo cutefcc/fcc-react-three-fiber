@@ -3,7 +3,8 @@ import gsap from 'gsap';
 import { Mesh } from 'three';
 import * as THREE from 'three';
 import Header from '@components/Header';
-import { Canvas, ObjectMap } from '@react-three/fiber';
+import { useNavigate } from 'react-router-dom';
+import { Canvas, ObjectMap, useFrame } from '@react-three/fiber';
 import {
   OrbitControls,
   PerspectiveCamera,
@@ -15,6 +16,8 @@ import {
   Text,
   PositionalAudio,
 } from '@react-three/drei';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+// import { useLoader } from '@react-three/fiber';
 import { Physics, usePlane, useBox } from '@react-three/cannon';
 import { Left, Right, Title, SvgButton, BoxContainer, BoxContainerItem } from './style';
 import { useImmer } from '@hooks/useImmer';
@@ -71,20 +74,56 @@ const config = [
 ];
 
 const Home = (): JSX.Element => {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const sound = useRef(null);
+  const camera = useRef(null);
+  const dLight = useRef(null);
   const [currNav, setCurrNav] = useImmer<number>(0);
   const [showWalls, setShowWalls] = useImmer<boolean>(true); // 是否显示墙壁
   const [showModel, setShowModel] = useImmer<boolean>(true); // 是否显示主模型
+  const [enableZoom, setEnableZoom] = useImmer<boolean>(true); // 是否运行场景缩放
   const [showFloor, setShowFloor] = useImmer<{ show: boolean }>({ show: true }); // 是否显示地板
   // const [isRotate, setIsRotate] = useImmer<boolean>(false); // 是否旋转状态
   const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
-  const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
+  // const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
+  const [glb, setGlb] = useImmer<GLTF & ObjectMap>(
+    useGLTF('/public/models/exhaust_nozzle_y.glb')
+    // useGLTF('/public/models/test1.glb')
+    // useLoader(OBJLoader, '/public/models/exhaust_nozzle.glb')
+  );
 
   const handleNavClick = (index: number) => () => {
     setCurrNav(index);
   };
   useEffect(() => {}, []);
+
+  const handleZoom = () => {
+    setEnableZoom(!enableZoom);
+  };
+  const handleCameraTop = () => {
+    gsap.to(camera.current.position, { x: 0, y: 35, z: 0, duration: 5, ease: 'power3' });
+    gsap.to(dLight.current.position, { x: 0, y: 35, z: 0, duration: 5, ease: 'power3' });
+  };
+  const handleCameraFront = () => {
+    gsap.to(camera.current.position, { x: 35, y: 12, z: 0, duration: 5, ease: 'power3' });
+    gsap.to(dLight.current.position, { x: 35, y: 12, z: 0, duration: 5, ease: 'power3' });
+  };
+  const handleCameraBank = () => {
+    gsap.to(camera.current.position, { x: -35, y: 12, z: 0, duration: 5, ease: 'power3' });
+    gsap.to(dLight.current.position, { x: -35, y: 12, z: 0, duration: 5, ease: 'power3' });
+  };
+  const handleCameraSide1 = () => {
+    gsap.to(camera.current.position, { x: 0, y: 12, z: 35, duration: 5, ease: 'power3' });
+    gsap.to(dLight.current.position, { x: 0, y: 12, z: 35, duration: 5, ease: 'power3' });
+  };
+  const handleCameraSide2 = () => {
+    gsap.to(camera.current.position, { x: 0, y: 12, z: -35, duration: 5, ease: 'power3' });
+    gsap.to(dLight.current.position, { x: 0, y: 12, z: -35, duration: 5, ease: 'power3' });
+  };
+  const handleToFlv = () => {
+    navigate('/flv');
+  };
   const handleMusic = () => {
     sound?.current?.play();
   };
@@ -123,14 +162,25 @@ const Home = (): JSX.Element => {
   };
   const LoadAsyncModel = memo(() => {
     // enable shadow
-    glb.nodes.mesh_0.castShadow = true;
+    // glb.nodes.mesh_0.castShadow = true;
+    console.log('glb', glb);
+    // useFrame((state, delta) => {
+    //   // console.log('state', state);
+    //   camera.current.position.x += 0.01;
+    // });
+    const color2 = new THREE.Color(0xffff00);
+    glb.nodes.exhaust_nozzle_8.castShadow = true;
+    // glb.nodes.Polygonal_Model_1_Triangles_0.castShadow = true;
     return showModel ? (
       <primitive
         castShadow
-        receiveShadow
+        // receiveShadow
         object={glb.scene}
-        scale={[0.04, 0.04, 0.04]}
+        // object={glb}
+        // scale={[1, 1, 1]}
+        scale={[0.025, 0.025, 0.025]}
         position={[0, 5, 0]}
+        // color={color2}
       ></primitive>
     ) : null;
   });
@@ -312,9 +362,10 @@ const Home = (): JSX.Element => {
       <div className="w-full h-screen">
         <Canvas shadows={true}>
           {/* 可以改变position来调整camera的距离 和 方向，起到场景放大缩小功能 */}
-          <PerspectiveCamera makeDefault position={[-8, 12, 32]} />
+          <PerspectiveCamera ref={camera} makeDefault position={[-8, 12, 32]} />
           {/* <PerspectiveCamera makeDefault position={[0, 20, 0]} /> */}
-          <OrbitControls />
+          {/* // OrbitControls 用于控制相机的位置 */}
+          <OrbitControls enableZoom={enableZoom} />
           {/* // 环境光 */}
           <ambientLight />
           {/* // 坐标轴 */}
@@ -322,10 +373,11 @@ const Home = (): JSX.Element => {
           {/* <pointLight position={[10, 10, 10]} /> */}
           {/* // 平行光1 */}
           <directionalLight
+            ref={dLight}
             position={[10, 10, 15]}
             intensity={0.7}
             castShadow={true}
-            color={'#fff'}
+            color={'#f0f'}
           />
           <PositionalAudio
             ref={sound}
@@ -377,6 +429,27 @@ const Home = (): JSX.Element => {
             </BoxContainerItem>
             <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleStopMusic}>
               暂停bgm
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleToFlv}>
+              拆解动画
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleZoom}>
+              {enableZoom ? '禁止缩放' : '允许缩放'}
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraTop}>
+              俯视图
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraFront}>
+              前视图
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraBank}>
+              后视图
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraSide1}>
+              侧视图1
+            </BoxContainerItem>
+            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraSide2}>
+              侧视图2
             </BoxContainerItem>
           </BoxContainer>
         </div>

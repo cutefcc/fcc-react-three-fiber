@@ -4,13 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { TopHeader, FullScreen } from './style';
 
 interface Props {
-  onFullScreen: () => void;
-  onExitFullScreen: () => void;
+  onFullScreen?: () => void;
+  onExitFullScreen?: () => void;
+  fr?: string;
 }
 
 const Header = (props: Props) => {
-  const { onFullScreen = () => {}, onExitFullScreen = () => {} } = props;
-  // const navigate = useNavigate();
+  const { onFullScreen = () => {}, onExitFullScreen = () => {}, fr = '' } = props;
+  const navigate = useNavigate();
+  const handleToHome = () => {
+    navigate('/');
+  };
   const getCurrTime = () => {
     return `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
@@ -41,10 +45,17 @@ const Header = (props: Props) => {
         WZ8
       </span> */}
       <div className="absolute right-80 top-0">{time}</div>
-      <FullScreen
-        className="absolute w-40 h-40 cursor-pointer right-20"
-        onClick={handleFull}
-      ></FullScreen>
+      {fr === 'flv' && (
+        <div className="cursor-pointer" onClick={handleToHome}>
+          返回 Home
+        </div>
+      )}
+      {fr !== 'flv' && (
+        <FullScreen
+          className="absolute w-40 h-40 cursor-pointer right-20"
+          onClick={handleFull}
+        ></FullScreen>
+      )}
     </TopHeader>
   );
 };
