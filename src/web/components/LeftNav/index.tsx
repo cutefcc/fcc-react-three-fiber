@@ -18,6 +18,7 @@ const config = [
   {
     key: 4,
     text: '性能仿真分系统',
+    route: '/performance',
   },
   {
     key: 5,

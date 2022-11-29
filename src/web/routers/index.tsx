@@ -5,6 +5,7 @@ import Home from '@pages/Home';
 import Flv from '@pages/Flv';
 import Engine from '@pages/Engine';
 import Cockpit from '@pages/Cockpit';
+import Performance from '@pages/Performance';
 import { Nothing, NothingText } from './style';
 const Routes: RouteObject[] = [];
 const Layout = () => (
@@ -37,6 +38,7 @@ const mainRoutes = {
     { path: '/flv', element: <Flv /> },
     { path: '/engine', element: <Engine /> },
     { path: '/cockpit', element: <Cockpit /> },
+    { path: '/performance', element: <Performance /> },
     { path: '*', element: <NoMatch /> },
   ],
 };
