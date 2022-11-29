@@ -1,22 +1,5 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 export const Container = styled.div``;
-const clippath = keyframes`
-  0%,
-  100% {
-    clip-path: inset(0 0 95% 0);
-  }
-
-  25% {
-    clip-path: inset(0 95% 0 0);
-  }
-  50% {
-    clip-path: inset(95% 0 0 0);
-  }
-  75% {
-    clip-path: inset(0 0 0 95%);
-  }
-`;
 export const Left = styled.div`
   position: absolute;
   top: 6vh;

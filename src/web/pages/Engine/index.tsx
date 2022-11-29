@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { Mesh } from 'three';
 import * as THREE from 'three';
 import Header from '@components/Header';
+import LeftNav from '@components/LeftNav';
 import { useNavigate } from 'react-router-dom';
 import { Canvas, ObjectMap, useFrame } from '@react-three/fiber';
 import {
@@ -23,6 +24,7 @@ import { Left, Right, Title, SvgButton, BoxContainer, BoxContainerItem } from '.
 import { useImmer } from '@hooks/useImmer';
 import Floor from './Floor';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import Button from '@mui/material/Button/Button';
 // import Button from '@mui/material/Button';
 const planeColor = new THREE.Color(0x000000);
 const config = [
@@ -313,29 +315,7 @@ const Home = (): JSX.Element => {
     );
   };
   const LeftComponent = () => {
-    return (
-      <Left>
-        <div className="relative" id="left">
-          <Title className="">
-            场景导航
-            <SvgButton></SvgButton>
-          </Title>
-          <BoxContainer>
-            {config.map((item, index) => {
-              return (
-                <BoxContainerItem
-                  key={item.key}
-                  className={`p-5 mb-10 rounded-[4px]`}
-                  onClick={handleNavClick(index)}
-                >
-                  {item.text}
-                </BoxContainerItem>
-              );
-            })}
-          </BoxContainer>
-        </div>
-      </Left>
-    );
+    return <LeftNav />;
   };
   const SkyBox = () => {
     // const doorKtx = useKTX2('/public/textures/door1.ktx2');
@@ -401,53 +381,153 @@ const Home = (): JSX.Element => {
       <Right>
         <div className="relative" id="right">
           <Title className="">操作</Title>
-          <BoxContainer>
+          <BoxContainer className="w-full">
             {showModel && (
-              <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleBegin}>
-                开始旋转
-              </BoxContainerItem>
+              <div className="mr-5 mb-10">
+                <Button
+                  style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                  onClick={handleBegin}
+                  variant="contained"
+                  className="p-5 mb-10"
+                >
+                  开始旋转
+                </Button>
+              </div>
             )}
+
             {showModel && (
-              <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handlePause}>
-                暂停旋转
-              </BoxContainerItem>
+              <div className="mr-5 mb-10">
+                <Button
+                  style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                  onClick={handlePause}
+                  variant="contained"
+                  className="p-5 mb-10"
+                >
+                  暂停旋转
+                </Button>
+              </div>
             )}
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleWalls}>
-              {showWalls ? '隐藏墙壁' : '显示墙壁'}
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleModel}>
-              {showModel ? '隐藏模型' : '显示模型'}
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleFloor}>
-              {showFloor.show ? '隐藏地板' : '显示地板'}
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleMusic}>
-              播放bgm
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleStopMusic}>
-              暂停bgm
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleToFlv}>
-              拆解动画
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleZoom}>
-              {enableZoom ? '禁止缩放' : '允许缩放'}
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraTop}>
-              俯视图
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraFront}>
-              前视图
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraBank}>
-              后视图
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraSide1}>
-              侧视图1
-            </BoxContainerItem>
-            <BoxContainerItem className={`p-5 mb-10 rounded-[4px]`} onClick={handleCameraSide2}>
-              侧视图2
-            </BoxContainerItem>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleWalls}
+                variant="contained"
+                className="p-5 mb-10"
+              >
+                {showWalls ? '隐藏墙壁' : '显示墙壁'}
+              </Button>
+            </div>
+
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleModel}
+                variant="contained"
+                className="p-5"
+              >
+                {showModel ? '隐藏模型' : '显示模型'}
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleFloor}
+                variant="contained"
+                className="p-5"
+              >
+                {showFloor.show ? '隐藏地板' : '显示地板'}
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleMusic}
+                variant="contained"
+                className="p-5"
+              >
+                播放bgm
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleStopMusic}
+                variant="contained"
+                className="p-5"
+              >
+                暂停bgm
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleToFlv}
+                variant="contained"
+                className="p-5"
+              >
+                拆解动画
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleZoom}
+                variant="contained"
+                className="p-5"
+              >
+                {enableZoom ? '禁止缩放' : '允许缩放'}
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleCameraFront}
+                variant="contained"
+                className="p-5"
+              >
+                前视图
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleCameraBank}
+                variant="contained"
+                className="p-5"
+              >
+                后视图
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleCameraTop}
+                variant="contained"
+                className="p-5"
+              >
+                俯视图
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleCameraSide1}
+                variant="contained"
+                className="p-5"
+              >
+                侧视图1
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                侧视图2
+              </Button>
+            </div>
           </BoxContainer>
         </div>
       </Right>

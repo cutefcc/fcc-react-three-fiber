@@ -3,6 +3,7 @@ import { Link, RouteObject, Outlet } from 'react-router-dom';
 import Loading from '@components/Loading';
 import Home from '@pages/Home';
 import Flv from '@pages/Flv';
+import Engine from '@pages/Engine';
 import { Nothing, NothingText } from './style';
 const Routes: RouteObject[] = [];
 const Layout = () => (
@@ -33,6 +34,7 @@ const mainRoutes = {
     { index: true, element: <Home /> },
     { path: '/loading', element: <Loading /> },
     { path: '/flv', element: <Flv /> },
+    { path: '/engine', element: <Engine /> },
     { path: '*', element: <NoMatch /> },
   ],
 };
