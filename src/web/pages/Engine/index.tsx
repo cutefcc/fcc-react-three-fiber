@@ -27,55 +27,8 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import Button from '@mui/material/Button/Button';
 // import Button from '@mui/material/Button';
 const planeColor = new THREE.Color(0x000000);
-const config = [
-  {
-    key: 1,
-    text: '发动机',
-    names: ['Etageres_Books'],
-    animation: {
-      position: [15, 10, -5],
-      target: [2.3, 0, -2.3],
-    },
-  },
-  {
-    key: 2,
-    text: '座舱操作',
-    names: ['Bureau_Accueil'],
-    animation: {
-      position: [5, 10, -0],
-      target: [11.4, 0, -0],
-    },
-  },
-  {
-    key: 3,
-    text: '原理演示',
-    names: ['Tables_Lectures'],
-    animation: {
-      position: [-11, 10, 0],
-      target: [5, 0, -7.5],
-    },
-  },
-  {
-    key: 4,
-    text: '控制训练',
-    names: ['Murs_Groupe'],
-    animation: {
-      position: [11, 10, 0],
-      target: [-5.5, 0, -5.8],
-    },
-  },
-  {
-    key: 5,
-    text: '退出登录',
-    names: ['Presentoire_Journaux'],
-    animation: {
-      position: [17, 10, -12],
-      target: [7.3, 0, -3.6],
-    },
-  },
-];
 
-const Home = (): JSX.Element => {
+const Engine = (): JSX.Element => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const sound = useRef(null);
@@ -542,4 +495,4 @@ const Home = (): JSX.Element => {
     </div>
   );
 };
-export default memo(Home);
+export default memo(Engine);

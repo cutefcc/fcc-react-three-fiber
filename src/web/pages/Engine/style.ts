@@ -41,15 +41,11 @@ export const SvgButton = styled.div`
   background-size: 100%;
   cursor: pointer;
 `;
-// export const ButtonPause = styled.div`
-//   background-image: url('/public/images/pause.svg');
-// `;
 export const BoxContainer = styled.div`
   height: calc(100% - 36px);
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
   align-items: center;
   padding-bottom: 10px;
   position: relative;

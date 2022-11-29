@@ -13,6 +13,7 @@ const config = [
   {
     key: 3,
     text: '座舱仿真分系统',
+    route: '/cockpit',
   },
   {
     key: 4,
