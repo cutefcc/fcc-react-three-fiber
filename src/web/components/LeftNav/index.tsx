@@ -28,6 +28,7 @@ const config = [
   {
     key: 6,
     text: '声音模拟分系统',
+    route: '/sound',
   },
   {
     key: 7,

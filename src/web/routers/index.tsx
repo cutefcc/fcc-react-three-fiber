@@ -7,6 +7,7 @@ import Engine from '@pages/Engine';
 import Cockpit from '@pages/Cockpit';
 import Performance from '@pages/Performance';
 import Avionics from '@pages/Avionics';
+import Sound from '@pages/Sound';
 import { Nothing, NothingText } from './style';
 const Routes: RouteObject[] = [];
 const Layout = () => (
@@ -41,6 +42,7 @@ const mainRoutes = {
     { path: '/cockpit', element: <Cockpit /> },
     { path: '/performance', element: <Performance /> },
     { path: '/avionics', element: <Avionics /> },
+    { path: '/sound', element: <Sound /> },
     { path: '*', element: <NoMatch /> },
   ],
 };
