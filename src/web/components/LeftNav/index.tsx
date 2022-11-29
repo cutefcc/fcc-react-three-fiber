@@ -23,6 +23,7 @@ const config = [
   {
     key: 5,
     text: '航电仿真分系统',
+    route: '/avionics',
   },
   {
     key: 6,
