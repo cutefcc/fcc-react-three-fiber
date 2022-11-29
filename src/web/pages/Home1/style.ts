@@ -20,8 +20,7 @@ const clippath = keyframes`
 export const Left = styled.div`
   position: absolute;
   top: 6vh;
-  // margin: 1vh;
-  padding: 3px;
+  margin: 1vh;
   width: 20vw;
   height: 92vh;
   display: flex;
@@ -33,8 +32,7 @@ export const Right = styled.div`
   position: absolute;
   top: 6vh;
   right: 0;
-  // margin: 1vh;
-  padding: 3px;
+  margin: 1vh;
   width: 20vw;
   height: 92vh;
   display: flex;
@@ -42,24 +40,36 @@ export const Right = styled.div`
   justify-content: space-between;
   z-index: 10;
 `;
-export const Midd = styled.div`
-  height: 100vh;
-`;
 export const Title = styled.div`
   height: 24px;
   margin-bottom: 12px;
   font-weight: bold;
   font-size: 18px;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+export const SvgButton = styled.div`
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  background-image: url('/public/images/play.svg');
+  background-size: 100%;
+  cursor: pointer;
+`;
+// export const ButtonPause = styled.div`
+//   background-image: url('/public/images/pause.svg');
+// `;
 export const BoxContainer = styled.div`
   height: calc(100% - 36px);
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-bottom: 10px;
+  position: relative;
 `;
 export const BoxContainerItem = styled.div`
   width: 26%;
