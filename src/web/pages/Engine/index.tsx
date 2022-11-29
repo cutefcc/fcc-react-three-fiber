@@ -481,6 +481,66 @@ const Engine = (): JSX.Element => {
                 侧视图2
               </Button>
             </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                // onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                原理（无）
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                // onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                单元体M01（无）
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                // onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                单元体M02（无）
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                // onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                单元体M03（无）
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                // onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                单元体M04（无）
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                // onClick={handleCameraSide2}
+                variant="contained"
+                className="p-5"
+              >
+                单元体M05（无）
+              </Button>
+            </div>
           </BoxContainer>
         </div>
       </Right>

@@ -38,14 +38,17 @@ const config = [
   {
     key: 8,
     text: '综合控制分系统',
+    route: '/control',
   },
   {
     key: 9,
     text: '网络分系统',
+    route: '/network',
   },
   {
     key: 10,
     text: '训练系统',
+    route: '/training',
   },
 ];
 const LeftNav = () => {

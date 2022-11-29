@@ -8,6 +8,9 @@ import Cockpit from '@pages/Cockpit';
 import Performance from '@pages/Performance';
 import Avionics from '@pages/Avionics';
 import Sound from '@pages/Sound';
+import Control from '@pages/Control';
+import Network from '@pages/Network';
+import Training from '@pages/Training';
 import { Nothing, NothingText } from './style';
 const Routes: RouteObject[] = [];
 const Layout = () => (
@@ -43,6 +46,9 @@ const mainRoutes = {
     { path: '/performance', element: <Performance /> },
     { path: '/avionics', element: <Avionics /> },
     { path: '/sound', element: <Sound /> },
+    { path: '/control', element: <Control /> },
+    { path: '/network', element: <Network /> },
+    { path: '/training', element: <Training /> },
     { path: '*', element: <NoMatch /> },
   ],
 };
