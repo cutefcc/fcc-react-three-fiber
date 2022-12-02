@@ -43,7 +43,9 @@ const Engine = (): JSX.Element => {
   const [gsapRotation, setGsapRotation] = useImmer<gsap.core.Tween | null>(null);
   // const [glb, setGlb] = useImmer<GLTF & ObjectMap>(useGLTF(`/public/models/Base.glb`));
   const [glb, setGlb] = useImmer<GLTF & ObjectMap>(
-    useGLTF('/public/models/exhaust_nozzle_y.glb')
+    // useGLTF('/public/models/exhaust_nozzle_y.glb')
+    // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
+    useGLTF('/public/models/exhaust_nozzle_y_draco.glb', '/public/draco/javascript/')
     // useGLTF('/public/models/test1.glb')
     // useLoader(OBJLoader, '/public/models/exhaust_nozzle.glb')
   );
