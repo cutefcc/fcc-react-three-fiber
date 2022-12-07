@@ -25,6 +25,7 @@ import { useImmer } from '@hooks/useImmer';
 import Floor from './Floor';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import Button from '@mui/material/Button/Button';
+import { constSelector } from 'recoil';
 // import Button from '@mui/material/Button';
 const planeColor = new THREE.Color(0x000000);
 
@@ -36,7 +37,7 @@ const Engine = (): JSX.Element => {
   const dLight = useRef(null);
   const [currNav, setCurrNav] = useImmer<number>(0);
   const [showWalls, setShowWalls] = useImmer<boolean>(true); // 是否显示墙壁
-  const [showModel, setShowModel] = useImmer<boolean>(true); // 是否显示主模型
+  const [showModel, setShowModel] = useImmer<number>(0); // 显示哪一个模块 0 1 2 3 4 5 分别表示主模块， 1 2 3 4 5 单元体
   const [enableZoom, setEnableZoom] = useImmer<boolean>(true); // 是否运行场景缩放
   const [showFloor, setShowFloor] = useImmer<{ show: boolean }>({ show: true }); // 是否显示地板
   // const [isRotate, setIsRotate] = useImmer<boolean>(false); // 是否旋转状态
@@ -48,6 +49,26 @@ const Engine = (): JSX.Element => {
     useGLTF('/public/models/exhaust_nozzle_y_draco.glb', '/public/draco/javascript/')
     // useGLTF('/public/models/test1.glb')
     // useLoader(OBJLoader, '/public/models/exhaust_nozzle.glb')
+  );
+  const [m01Draco, setM01Draco] = useImmer<GLTF & ObjectMap>(
+    // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
+    useGLTF('/public/models/m01_draco.glb', '/public/draco/javascript/')
+  );
+  const [m02Draco, setM02Draco] = useImmer<GLTF & ObjectMap>(
+    // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
+    useGLTF('/public/models/m02_draco.glb', '/public/draco/javascript/')
+  );
+  const [m03Draco, setM03Draco] = useImmer<GLTF & ObjectMap>(
+    // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
+    useGLTF('/public/models/m03_draco.glb', '/public/draco/javascript/')
+  );
+  const [m04Draco, setM04Draco] = useImmer<GLTF & ObjectMap>(
+    // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
+    useGLTF('/public/models/m04_draco.glb', '/public/draco/javascript/')
+  );
+  const [m05Draco, setM05Draco] = useImmer<GLTF & ObjectMap>(
+    // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
+    useGLTF('/public/models/m05_draco.glb', '/public/draco/javascript/')
   );
 
   const handleNavClick = (index: number) => () => {
@@ -120,14 +141,12 @@ const Engine = (): JSX.Element => {
   const LoadAsyncModel = memo(() => {
     // enable shadow
     // glb.nodes.mesh_0.castShadow = true;
-    console.log('glb', glb);
     // useFrame((state, delta) => {
     //   // console.log('state', state);
     //   camera.current.position.x += 0.01;
     // });
     glb.nodes.exhaust_nozzle_8.castShadow = true;
-    // glb.nodes.Polygonal_Model_1_Triangles_0.castShadow = true;
-    return showModel ? (
+    return showModel === 0 ? (
       <primitive
         castShadow
         receiveShadow
@@ -138,14 +157,75 @@ const Engine = (): JSX.Element => {
       ></primitive>
     ) : null;
   });
+  const LoadM01 = memo(() => {
+    m01Draco.nodes.M01附件机匣.castShadow = true;
+    return showModel === 1 ? (
+      <primitive
+        castShadow
+        receiveShadow
+        object={m01Draco.scene}
+        scale={[0.02, 0.02, 0.02]}
+        position={[0, 5, 0]}
+      ></primitive>
+    ) : null;
+  });
+  const LoadM02 = memo(() => {
+    m02Draco.nodes.M02轴流压气机.castShadow = true;
+    return showModel === 2 ? (
+      <primitive
+        castShadow
+        receiveShadow
+        object={m02Draco.scene}
+        scale={[0.02, 0.02, 0.02]}
+        position={[0, 5, 0]}
+      ></primitive>
+    ) : null;
+  });
+  const LoadM03 = memo(() => {
+    m03Draco.nodes.M03燃气发生器.castShadow = true;
+    return showModel === 3 ? (
+      <primitive
+        castShadow
+        receiveShadow
+        object={m03Draco.scene}
+        scale={[0.02, 0.02, 0.02]}
+        position={[0, 5, 0]}
+      ></primitive>
+    ) : null;
+  });
+  const LoadM04 = memo(() => {
+    m04Draco.nodes.M04尾喷管.castShadow = true;
+    return showModel === 4 ? (
+      <primitive
+        castShadow
+        receiveShadow
+        object={m04Draco.scene}
+        scale={[0.02, 0.02, 0.02]}
+        position={[0, 5, 0]}
+      ></primitive>
+    ) : null;
+  });
+  const LoadM05 = memo(() => {
+    m05Draco.nodes.M05减速器.castShadow = true;
+    return showModel === 5 ? (
+      <primitive
+        castShadow
+        receiveShadow
+        object={m05Draco.scene}
+        scale={[0.02, 0.02, 0.02]}
+        position={[0, 5, 0]}
+      ></primitive>
+    ) : null;
+  });
   const handleBegin = () => {
     // setIsRotate(true);
-    if (gsapRotation) {
-      gsapRotation.play();
-      return;
-    }
+    // if (gsapRotation) {
+    //   gsapRotation.play();
+    //   return;
+    // }
+    const map = [glb, m01Draco, m02Draco, m03Draco, m04Draco, m05Draco];
     setGsapRotation(
-      gsap.to(glb.scene.rotation, {
+      gsap.to(map[showModel].scene.rotation, {
         y: Math.PI * 2, // 旋转一圈
         duration: 10, // 旋转一圈的时间
         repeat: -1, // 无限循环
@@ -161,8 +241,8 @@ const Engine = (): JSX.Element => {
   const handleWalls = () => {
     setShowWalls(!showWalls);
   };
-  const handleModel = () => {
-    setShowModel(!showModel);
+  const handleModel = (i: number) => () => {
+    setShowModel(i);
   };
   const handleFloor = () => {
     setShowFloor(draft => {
@@ -321,6 +401,11 @@ const Engine = (): JSX.Element => {
           />
           <Suspense fallback={<Loader />}>
             <LoadAsyncModel />
+            <LoadM01 />
+            <LoadM02 />
+            <LoadM03 />
+            <LoadM04 />
+            <LoadM05 />
           </Suspense>
           <Physics>
             <Floor showFloor={showFloor} />
@@ -337,7 +422,7 @@ const Engine = (): JSX.Element => {
         <div className="relative" id="right">
           <Title className="">操作</Title>
           <BoxContainer className="w-full">
-            {showModel && (
+            {[0, 1, 2, 3, 4, 5].includes(showModel) && (
               <div className="mr-5 mb-10">
                 <Button
                   style={{ background: 'rgba(81, 99, 140, 0.4)' }}
@@ -350,7 +435,7 @@ const Engine = (): JSX.Element => {
               </div>
             )}
 
-            {showModel && (
+            {[0, 1, 2, 3, 4, 5].includes(showModel) && (
               <div className="mr-5 mb-10">
                 <Button
                   style={{ background: 'rgba(81, 99, 140, 0.4)' }}
@@ -370,17 +455,6 @@ const Engine = (): JSX.Element => {
                 className="p-5 mb-10"
               >
                 {showWalls ? '隐藏墙壁' : '显示墙壁'}
-              </Button>
-            </div>
-
-            <div className="mr-5 mb-10">
-              <Button
-                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
-                onClick={handleModel}
-                variant="contained"
-                className="p-5"
-              >
-                {showModel ? '隐藏模型' : '显示模型'}
               </Button>
             </div>
             <div className="mr-5 mb-10">
@@ -496,7 +570,17 @@ const Engine = (): JSX.Element => {
             <div className="mr-5 mb-10">
               <Button
                 style={{ background: 'rgba(81, 99, 140, 0.4)' }}
-                // onClick={handleCameraSide2}
+                onClick={handleModel(0)}
+                variant="contained"
+                className="p-5"
+              >
+                显示主模型
+              </Button>
+            </div>
+            <div className="mr-5 mb-10">
+              <Button
+                style={{ background: 'rgba(81, 99, 140, 0.4)' }}
+                onClick={handleModel(1)}
                 variant="contained"
                 className="p-5"
               >
@@ -506,7 +590,7 @@ const Engine = (): JSX.Element => {
             <div className="mr-5 mb-10">
               <Button
                 style={{ background: 'rgba(81, 99, 140, 0.4)' }}
-                // onClick={handleCameraSide2}
+                onClick={handleModel(2)}
                 variant="contained"
                 className="p-5"
               >
@@ -516,7 +600,7 @@ const Engine = (): JSX.Element => {
             <div className="mr-5 mb-10">
               <Button
                 style={{ background: 'rgba(81, 99, 140, 0.4)' }}
-                // onClick={handleCameraSide2}
+                onClick={handleModel(3)}
                 variant="contained"
                 className="p-5"
               >
@@ -526,7 +610,7 @@ const Engine = (): JSX.Element => {
             <div className="mr-5 mb-10">
               <Button
                 style={{ background: 'rgba(81, 99, 140, 0.4)' }}
-                // onClick={handleCameraSide2}
+                onClick={handleModel(4)}
                 variant="contained"
                 className="p-5"
               >
@@ -536,7 +620,7 @@ const Engine = (): JSX.Element => {
             <div className="mr-5 mb-10">
               <Button
                 style={{ background: 'rgba(81, 99, 140, 0.4)' }}
-                // onClick={handleCameraSide2}
+                onClick={handleModel(5)}
                 variant="contained"
                 className="p-5"
               >
