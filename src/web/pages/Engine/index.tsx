@@ -46,7 +46,8 @@ const Engine = (): JSX.Element => {
   const [glb, setGlb] = useImmer<GLTF & ObjectMap>(
     // useGLTF('/public/models/exhaust_nozzle_y.glb')
     // 加载压缩模型时需要更改 辅助draco文件 js .wasm 的目录，防止去外边cdn下载不下来的情况发生
-    useGLTF('/public/models/exhaust_nozzle_y_draco.glb', '/public/draco/javascript/')
+    // useGLTF('/public/models/exhaust_nozzle_y_draco.glb', '/public/draco/javascript/')
+    useGLTF('/public/models/m00_draco.glb', '/public/draco/javascript/')
     // useGLTF('/public/models/test1.glb')
     // useLoader(OBJLoader, '/public/models/exhaust_nozzle.glb')
   );
@@ -145,14 +146,15 @@ const Engine = (): JSX.Element => {
     //   // console.log('state', state);
     //   camera.current.position.x += 0.01;
     // });
-    glb.nodes.exhaust_nozzle_8.castShadow = true;
+    // console.log()
+    glb.nodes.软件主界面模型.castShadow = true;
     return showModel === 0 ? (
       <primitive
         castShadow
         receiveShadow
         object={glb.scene}
         // object={glb}
-        scale={[0.02, 0.02, 0.02]}
+        scale={[0.015, 0.015, 0.015]}
         position={[0, 5, 0]}
       ></primitive>
     ) : null;
