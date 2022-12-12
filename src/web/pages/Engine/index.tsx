@@ -146,7 +146,6 @@ const Engine = (): JSX.Element => {
     //   // console.log('state', state);
     //   camera.current.position.x += 0.01;
     // });
-    // console.log(glb);
     glb.nodes.软件主界面模型.castShadow = true;
     return showModel === 0 ? (
       <primitive
